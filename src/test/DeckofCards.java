@@ -5,6 +5,8 @@ import java.util.Collections;
 
 public class DeckofCards  {
 	ArrayList<Cards> deck = new ArrayList<>(52);
+	ArrayList<Cards> trashDeck = new ArrayList<>(52);
+	
 //	Collections shuffler;
 
 	
@@ -60,6 +62,15 @@ public void setDeck(ArrayList<Cards> deck) {
 	this.deck = deck;
 }
 
+public ArrayList<Cards> getTrashDeck() {
+	return trashDeck;
+}
+public void setTrashDeck(ArrayList<Cards> trashDeck) {
+	this.trashDeck = trashDeck;
+}
+public void addToTrashDeck(Cards trashCard) {
+	trashDeck.add(trashCard);
+}
 @Override
 public String toString() {
 	return "DeckofCards [deck=" + deck + "]";

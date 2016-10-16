@@ -1,10 +1,19 @@
 package test;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Test {
 	public static void main(String[] args) {
+	createDeck();
+	}
+	public static void createDeck(){
 		DeckofCards deck = new DeckofCards();
+		dealAHand(deck);
+	}
+	
+	public static void dealAHand(DeckofCards deck){
 		Cards firstCard = deal(deck);
 		Cards secondCard = deal(deck);
 		Cards thirdCard = deal(deck);
@@ -32,11 +41,22 @@ public class Test {
 			hitOrStand(playingHand, dealerHand, deck);
 	}
 	public static void hitOrStand(Hand player, Hand dealer, DeckofCards deck){
+		Scanner kb = new Scanner(System.in);
+		if(handTotal(player)==21||handTotal(dealer)==21){
+			if(handTotal(player)==21){
+					System.out.println("BlackJack!!  You win!!");
+			}
+			if(handTotal(dealer)==21){
+				System.out.println("BlackJack!!  Dealer Wins!!");
+			}
+			playAgain(deck, kb);
+			System.exit(0);
+		}
 		if(handTotal(player)>21){
 			System.out.println("Bust, hand over yo money");
+			playAgain(deck, kb);
 		}
 		else{
-			Scanner kb = new Scanner(System.in);
 			System.out.println("Do you want to hit or stand");
 			String hitchoice = kb.next().toLowerCase();
 			if(hitchoice.equals("hit")){
@@ -51,14 +71,18 @@ public class Test {
 				}
 				if(handTotal(dealer)>21){
 					System.out.println("Dealer Busts, take your money");
+					playAgain(deck, kb);
 				}
 				else{
 					if(handTotal(dealer)>handTotal(player)){
 						System.out.println("Dealer Wins, you lost your money");
+						playAgain(deck, kb);
 					}if(handTotal(dealer)<handTotal(player)){
 						System.out.println("You Win, take your money");
+						playAgain(deck, kb);
 					}if(handTotal(dealer)==handTotal(player)){
 						System.out.println("Push goes to the Dealer, you lost your money");
+						playAgain(deck, kb);
 					}	
 				}
 					
@@ -70,6 +94,38 @@ public class Test {
 			}
 		}
 		
+	}
+	
+	public static void checkDeckCount(DeckofCards deck){
+		ArrayList<Cards> newList = new ArrayList<Cards>();
+		if(deck.getDeck().size()<8){
+			for (Cards c : deck.getTrashDeck()) {
+				newList.add(c);
+			}
+			for (Cards c : deck.getDeck()) {
+				newList.add(c);
+			}
+			
+			Collections.shuffle(newList);
+			deck.setDeck(newList);
+		}
+	}
+	public static void playAgain(DeckofCards deck, Scanner scanner){
+		System.out.println("Do you want to play again");
+		char yesNo = scanner.next().toLowerCase().charAt(0);
+		
+		if(yesNo=='y'){
+			System.out.println("You gotta know when to Hold'em, and Know when to Fold'em");
+			checkDeckCount(deck);
+			dealAHand(deck);
+		}
+		else if(yesNo=='n'){
+			System.out.println("You gotta know when to walk away, and know when to RUN");
+		}
+		else{
+			System.out.println("You have entered an invalid statment. ");
+			playAgain(deck, scanner);
+		}
 	}
 	
 	public static int handTotal(Hand cardsInHand){
@@ -88,6 +144,7 @@ public class Test {
 		Cards deltCard = dec.getDeck().get(0);
 		dec.getDeck().remove(deltCard);
 //		System.out.println("Your card is " + deltCard);
+		dec.addToTrashDeck(deltCard);
 		System.out.println(dec.getDeck().size());
 		return deltCard;
 	}
