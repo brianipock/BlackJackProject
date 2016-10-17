@@ -38,9 +38,13 @@ public class Test {
 			System.out.println("Dealer card: " + fourthCard);
 			System.out.println("Dealer hand Value: " + handTotal(dealerHand));
 			
-			hitOrStand(playingHand, dealerHand, deck);
+			hitOrStand(playingHand, dealerHand, deck, firstCard, secondCard, thirdCard, fourthCard);
 	}
-	public static void hitOrStand(Hand player, Hand dealer, DeckofCards deck){
+	
+	
+	
+	
+	public static void hitOrStand(Hand player, Hand dealer, DeckofCards deck, Cards first, Cards second, Cards third, Cards fourth){
 		Scanner kb = new Scanner(System.in);
 		if(handTotal(player)==21||handTotal(dealer)==21){
 			if(handTotal(player)==21){
@@ -49,12 +53,25 @@ public class Test {
 			if(handTotal(dealer)==21){
 				System.out.println("BlackJack!!  Dealer Wins!!");
 			}
+			if(handTotal(player)==21 && handTotal(dealer)==21){
+				System.out.println("Push goes to the Dealer, Hand over your money!");
+			}
 			playAgain(deck, kb);
 			System.exit(0);
 		}
-		if(handTotal(player)>21){
+		if(handTotal(player)> 21){
 			System.out.println("Bust, hand over yo money");
 			playAgain(deck, kb);
+//			if(handTotal(player)>21 && (first.getValue() == 11|| third.getValue() == 11)){
+//				first.setValue(1);
+//				third.setValue(1);
+//			}
+		/*Here I tried to insert ACES logic, by placing a conditional statement for a hand total greater than 21
+		 * I nested an if statement so that it would reassign a  value for either of the cards dealt origianlly if it were and ace and value goes from 11 to 1
+		 * I am not sure which if statement needs to be nested into the other.  I presume that it would work either way, but 
+		 * this appears to have no effect on value 11 cards.
+		 */
+		
 		}
 		else{
 			System.out.println("Do you want to hit or stand");
@@ -62,16 +79,21 @@ public class Test {
 			if(hitchoice.equals("hit")){
 				player.addCardToHand(deal(deck));
 				System.out.println("Your hand Value: " + handTotal(player));
-				hitOrStand(player, dealer, deck);
+				hitOrStand(player, dealer, deck, first, second, third, fourth);
 			}
 			else if(hitchoice.equals("stand")){
 				while(handTotal(dealer)< 17){
 					dealer.addCardToHand(deal(deck));
 					System.out.println("Dealer hand Value: " + handTotal(dealer));
 				}
-				if(handTotal(dealer)>21){
+					if(handTotal(dealer)>21){
 					System.out.println("Dealer Busts, take your money");
 					playAgain(deck, kb);
+//					if(handTotal(dealer)>21 && (second.getValue() == 11|| fourth.getValue() == 11)){
+//						second.setValue(1);
+//						fourth.setValue(1);
+//						}
+					//Here I used the same logic to reassign the value for aces for the dealer.
 				}
 				else{
 					if(handTotal(dealer)>handTotal(player)){
@@ -89,7 +111,7 @@ public class Test {
 			}
 			else{
 				System.err.println("you have entered an invalid choice");
-				hitOrStand(player, dealer, deck);
+				hitOrStand(player, dealer, deck, first, second, third, fourth);
 				
 			}
 		}
